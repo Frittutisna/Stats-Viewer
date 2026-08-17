@@ -13,7 +13,7 @@ QUICK_MODE: bool = False
 
 CATEGORY_THRESHOLD  : int = 5
 TIME_DIFFERENCE     : int = 9
-TOTAL_THRESHOLD     : int = 65
+TOTAL_THRESHOLD     : int = 40
 
 WEEKDAY_MAP: Dict[str, str] = {
     'Monday'    : 'Mon',
@@ -37,11 +37,9 @@ ZONE_MAP: Dict[str, str] = {
     'EU-NA'     : 'EU-NA'
 }
 
-BASE_URL: str = "https://docs.google.com/spreadsheets/d/1Fm6pMyXv7qhOQkLah4yX9HNow4WaDR4HJuAVMukQl34/export?format=csv&gid="
-NAME_URL: str = "https://docs.google.com/spreadsheets/d/10YBcZP_l5Tjf1MOiWeBlLg-ATuAWXgTPsj7bW79bU30/export?format=csv&gid=1934025140"
-
+BASE_URL            : str = "https://docs.google.com/spreadsheets/d/1Fm6pMyXv7qhOQkLah4yX9HNow4WaDR4HJuAVMukQl34/export?format=csv&gid="
+NAME_URL            : str = "https://docs.google.com/spreadsheets/d/10YBcZP_l5Tjf1MOiWeBlLg-ATuAWXgTPsj7bW79bU30/export?format=csv&gid=1934025140"
 WATCHED_THRESHOLD   : str = '2602160000'
-ZOMG_THRESHOLD      : str = '2603150000'
 
 SIGMOIDS: Dict[str, List[Tuple[str, float, float]]] = {
     'Watched': [
@@ -371,7 +369,7 @@ def create_plots(df: pd.DataFrame, metrics: List[Tuple[str, float, float]], file
 
         else:
             if col not in df.columns: continue
-            data_to_plot = [df[df[group_col] == g][col].dropna().tail(CATEGORY_THRESHOLD) for g in valid_groups]
+            data_to_plot = [df[df[group_col] == g][col].dropna() for g in valid_groups]
             ax.boxplot(data_to_plot, tick_labels = labels, **BOXPLOT_STYLE)
 
             means       = [d.mean() for d in data_to_plot]
@@ -486,9 +484,7 @@ def worker_task(mode: str, prefix: str, names: pd.DataFrame, cats: dict) -> None
     associated_names    = [prefix] if lookup.empty else names[names['ID'] == lookup['ID'].iloc[0]]['Name'].tolist()
     player_data         = record_df[record_df['Name'].isin(associated_names)].copy()
 
-    if player_data.empty or len(player_data) < TOTAL_THRESHOLD  : return
-    if mode == 'Watched' and prefix == 'zomg'                   : player_data = player_data[player_data['Timestamp'].astype(str) >= ZOMG_THRESHOLD]
-
+    if player_data.empty or len(player_data) < TOTAL_THRESHOLD: return
     incremental_metrics = ['Solos', 'Threes', 'Sevens', 'Corrects']
     for col in incremental_metrics: player_data[col] = pd.to_numeric(player_data[col], errors = 'coerce').fillna(0).astype(int)
 
