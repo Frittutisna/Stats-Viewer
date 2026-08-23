@@ -38,7 +38,7 @@ ZONE_MAP: Dict[str, str] = {
 }
 
 BASE_URL            : str = "https://docs.google.com/spreadsheets/d/1Fm6pMyXv7qhOQkLah4yX9HNow4WaDR4HJuAVMukQl34/export?format=csv&gid="
-NAME_URL            : str = "https://docs.google.com/spreadsheets/d/10YBcZP_l5Tjf1MOiWeBlLg-ATuAWXgTPsj7bW79bU30/export?format=csv&gid=1934025140"
+NAME_URL            : str = "https://docs.google.com/spreadsheets/d/1ihfqssregh74curDyvRE0GAFihQfovUAHpYDrtOIrOA/export?format=csv&gid=1903970832"
 WATCHED_THRESHOLD   : str = '2602160000'
 
 SIGMOIDS: Dict[str, List[Tuple[str, float, float]]] = {
