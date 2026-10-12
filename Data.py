@@ -4,6 +4,7 @@ from typing     import Dict, List, Optional, Tuple
 
 import concurrent.futures   as fut
 import matplotlib.pyplot    as plt
+import matplotlib.dates     as mdt
 import numpy                as np
 import pandas               as pd
 import requests             as req
@@ -13,7 +14,7 @@ QUICK_MODE: bool = False
 
 CATEGORY_THRESHOLD  : int = 5
 TIME_DIFFERENCE     : int = 9
-TOTAL_THRESHOLD     : int = 40
+TOTAL_THRESHOLD     : int = 75
 
 WEEKDAY_MAP: Dict[str, str] = {
     'Monday'    : 'Mon',
@@ -353,7 +354,10 @@ def create_plots(df: pd.DataFrame, metrics: List[Tuple[str, float, float]], file
                     style_axis(ax, 'Type Guess Rates' if col == 'Combined Guess Rate' else col, low, high, is_large = is_large)
                     ax.legend(fontsize = 14 if is_large else 12, frameon = True, facecolor = 'white', edgecolor = 'none')
 
-                ax.set_xticks([])
+                ax.xaxis.set_major_locator      (mdt.MonthLocator(bymonth = [1, 4, 7, 10]))
+                ax.xaxis.set_major_formatter    (mdt.DateFormatter('%y/%m'))
+                ax.xaxis.grid                   (True, linestyle = '-', color = 'black')
+                ax.tick_params                  (axis = 'x', labelsize = 22.5 if is_large else 15)
 
             else:
                 if col not in df.columns: continue
@@ -365,7 +369,11 @@ def create_plots(df: pd.DataFrame, metrics: List[Tuple[str, float, float]], file
                     ax.plot(x_chunk, y_smooth, color = 'black', zorder = 3)
 
                 style_axis(ax, col, low, high, is_large = is_large)
-                ax.set_xticks([])
+
+                ax.xaxis.set_major_locator      (mdt.MonthLocator(bymonth = [1, 4, 7, 10]))
+                ax.xaxis.set_major_formatter    (mdt.DateFormatter('%y/%m'))
+                ax.xaxis.grid                   (True, linestyle = '-', color = 'black')
+                ax.tick_params                  (axis = 'x', labelsize = 22.5 if is_large else 15)
 
         else:
             if col not in df.columns: continue
