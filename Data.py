@@ -465,7 +465,7 @@ def process_and_output_player(category_name: str, prefix: str, df: pd.DataFrame,
     output_dir          = Path(category_name) / prefix
 
     output_dir.mkdir(parents = True, exist_ok = True)
-    df_out.to_csv(output_dir / f'{prefix}.csv', float_format = '%.2f')
+    df_out.to_csv(output_dir / 'Data.csv', float_format = '%.2f')
 
     df_plot = df.reset_index(drop = True)
 
@@ -480,9 +480,9 @@ def process_and_output_player(category_name: str, prefix: str, df: pd.DataFrame,
     scatter_metrics     = [(col, *get_limits(df_plot[col], col, category_name)) for col in plot_candidates]
     boxplot_metrics     = [m for m in scatter_metrics if m[0] != 'Elo']
 
-    create_plots(df_plot, scatter_metrics, output_dir / f'{prefix}-General.png',    'scatter')
-    create_plots(df_plot, boxplot_metrics, output_dir / f'{prefix}-Day.png',        'boxplot',  'Day')
-    create_plots(df_plot, boxplot_metrics, output_dir / f'{prefix}-Zone.png',       'boxplot',  'Zone')
+    create_plots(df_plot, scatter_metrics, output_dir / 'General.png',  'scatter')
+    create_plots(df_plot, boxplot_metrics, output_dir / 'Day.png',      'boxplot',  'Day')
+    create_plots(df_plot, boxplot_metrics, output_dir / 'Zone.png',     'boxplot',  'Zone')
 
     print(f'[✓] Processed {output_dir}')
 
